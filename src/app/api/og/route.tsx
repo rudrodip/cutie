@@ -5,6 +5,7 @@ import { GoogleGenerativeAI } from "@google/generative-ai";
 import { aiResponseSchema } from "@/lib/schema";
 import { Redis } from "@upstash/redis";
 import { waitUntil } from "@vercel/functions";
+import { getBasePath } from "@/lib/utils";
 
 const CACHE_DURATION = 3 * 60 * 60 * 1000;
 const redis = new Redis({
@@ -81,16 +82,12 @@ export async function GET(request: NextRequest) {
     if (!query)
       return fetch(new URL("../../../../public/og.png", import.meta.url));
 
-    const [font, base, { output }] = await Promise.all([
+    const [font, { output }] = await Promise.all([
       fetch(
         new URL("../../../../assets/fonts/impact.ttf", import.meta.url)
       ).then((res) => res.arrayBuffer()),
-      fetch(new URL("../../../../public/base.png", import.meta.url)).then(
-        (res) => res.blob()
-      ),
       getCachedOrFetchResult(query),
     ]);
-    const base64 = await blobToBase64(base);
 
     waitUntil(Promise.all([
       logRequest(),
@@ -118,7 +115,7 @@ export async function GET(request: NextRequest) {
               height: "100%",
             }}
           >
-            <img src={`data:image/png;base64,${base64}`} alt="" />
+            <img src={`${getBasePath()}/base.png`} alt="" />
           </div>
           <div
             style={{
@@ -169,9 +166,3 @@ ALWAYS OUTPUT EMOJIS as output.
 
 Here's the query: ${query}
 `;
-
-async function blobToBase64(blob: Blob): Promise<string> {
-  const arrayBuffer = await blob.arrayBuffer();
-  const buffer = Buffer.from(arrayBuffer);
-  return buffer.toString("base64");
-}
