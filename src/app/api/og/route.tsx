@@ -81,10 +81,7 @@ export async function GET(request: NextRequest) {
     if (!query)
       return fetch(new URL("../../../../public/og.png", import.meta.url));
 
-    const [font, { output }] = await Promise.all([
-      fetch(
-        new URL("../../../../assets/fonts/impact.ttf", import.meta.url)
-      ).then((res) => res.arrayBuffer()),
+    const [{ output }] = await Promise.all([
       getCachedOrFetchResult(query),
     ]);
 
@@ -134,14 +131,6 @@ export async function GET(request: NextRequest) {
       ),
       {
         ...size,
-        fonts: [
-          {
-            name: "Inter",
-            data: font,
-            style: "normal",
-            weight: 400,
-          },
-        ],
       }
     );
   } catch (error) {
