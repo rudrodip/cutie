@@ -14,8 +14,8 @@ const redis = new Redis({
 });
 
 const size = {
-  width: 560,
-  height: 620,
+  width: 1120,
+  height: 1240,
 };
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY!);
@@ -72,7 +72,6 @@ const logIpData = async (
   );
 };
 
-export const runtime = "edge";
 export const maxDuration = 60;
 export async function GET(request: NextRequest) {
   try {
