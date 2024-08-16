@@ -14,8 +14,8 @@ const redis = new Redis({
 });
 
 const size = {
-  width: 1120,
-  height: 1240,
+  width: 560,
+  height: 620,
 };
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY!);
