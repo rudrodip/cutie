@@ -85,7 +85,7 @@ export async function GET(request: NextRequest) {
       fetch(
         new URL("../../../../assets/fonts/impact.ttf", import.meta.url)
       ).then((res) => res.arrayBuffer()),
-      fetch(new URL("../../../../assets/base.png", import.meta.url)).then(
+      fetch(new URL("../../../../public/base.png", import.meta.url)).then(
         (res) => res.blob()
       ),
       getCachedOrFetchResult(query),
